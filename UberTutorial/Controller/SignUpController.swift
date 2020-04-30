@@ -123,6 +123,13 @@ class SignUpController: UIViewController {
                                           "accountType" : accountTypeIndex]
             
             Database.database().reference().child("users").child(uid).updateChildValues(values) { (error, ref) in
+                
+                guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+
+                guard let controller = window.rootViewController as? HomeController else { return }
+
+                controller.configureUI()
+
                 self.dismiss(animated: true, completion: nil)
             }
             
