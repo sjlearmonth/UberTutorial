@@ -25,9 +25,8 @@ class LocationInputView: UIView {
         return button
     }()
     
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Stephen Learmonth"
         label.textColor = .darkGray
         label.font = UIFont.systemFont(ofSize: 16)
         return label
@@ -56,6 +55,13 @@ class LocationInputView: UIView {
         tf.placeholder = "Current Location"
         tf.backgroundColor = .systemGroupedBackground
         tf.isEnabled = false
+        tf.font = UIFont.systemFont(ofSize: 14)
+        
+        let paddingView = UIView()
+        paddingView.setDimensions(height: 30, width: 8)
+        tf.leftView = paddingView
+        tf.leftViewMode = .always
+        
         return tf
     }()
     
@@ -65,6 +71,12 @@ class LocationInputView: UIView {
         tf.backgroundColor = .lightGray
         tf.returnKeyType = .search
         tf.font = UIFont.systemFont(ofSize: 14)
+        
+        let paddingView = UIView()
+        paddingView.setDimensions(height: 30, width: 8)
+        tf.leftView = paddingView
+        tf.leftViewMode = .always
+        
         return tf
     }()
     
@@ -84,7 +96,33 @@ class LocationInputView: UIView {
         titleLabel.centerY(inView: backButton)
         titleLabel.centerX(inView: self)
         
-
+        addSubview(startingLocationTextField)
+        startingLocationTextField.anchor(top: backButton.bottomAnchor, left: leftAnchor,
+                                         right: rightAnchor, paddingTop: 4, paddingLeft: 40,
+                                         paddingRight: 40, height: 30)
+        
+        addSubview(destinationLocationTextField)
+        destinationLocationTextField.anchor(top: startingLocationTextField.bottomAnchor, left: leftAnchor,
+                                            right: rightAnchor, paddingTop: 12, paddingLeft: 40,
+                                            paddingRight: 40, height: 30)
+        
+        addSubview(startLocationIndicatorView)
+        startLocationIndicatorView.centerY(inView: startingLocationTextField, leftAnchor: leftAnchor, paddingLeft: 20)
+        startLocationIndicatorView.setDimensions(height: 6, width: 6)
+        startLocationIndicatorView.layer.cornerRadius = 6 / 2
+        
+        addSubview(destinationIndicatorView)
+        destinationIndicatorView.centerY(inView: destinationLocationTextField, leftAnchor: leftAnchor, paddingLeft: 20)
+        destinationIndicatorView.setDimensions(height: 6, width: 6)
+        destinationIndicatorView.layer.cornerRadius = 6 / 2
+        
+        addSubview(linkingView)
+        linkingView.centerX(inView: startLocationIndicatorView)
+        linkingView.anchor(top: startLocationIndicatorView.bottomAnchor,
+                           bottom: destinationIndicatorView.topAnchor,
+                           paddingTop: 4, paddingBottom: 4, width: 0.5)
+        
+        
     }
     
     required init?(coder: NSCoder) {
