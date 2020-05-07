@@ -15,15 +15,16 @@ private let reuseIdentifier = "LocationCell"
 class HomeController: UIViewController {
     
     // MARK: - Properties
+    
     private let mapView = MKMapView()
-    private let locationManager = CLLocationManager()
+    private let locationManager = LocationHandler.shared.locationManager
     
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
     private let tableView = UITableView()
     
-    private var fullname: String? {
-        didSet { locationInputView.titleLabel.text = fullname }
+    private var user: User? {
+        didSet { locationInputView.user = user }
     }
     
     private final let locationInputViewHeight: CGFloat = 200.0
@@ -35,15 +36,28 @@ class HomeController: UIViewController {
         checkIfUserIsLoggedIn()
         enableLocationServices()
         fetchUserData()
+        fetchDrivers()
 //        signOut()
     }
     
     // MARK: - API
     
     func fetchUserData() {
-        Service.shared.fetchUserData { (fullname) in
-            self.fullname = fullname
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        Service.shared.fetchUserData(uid: currentUid) { (user) in
+            self.user = user
         }
+    }
+    
+    func fetchDrivers() {
+        guard let location = locationManager?.location else { return }
+        Service.shared.fetchDrivers(location: location) { (driver) in
+            guard let coordinate = driver.location?.coordinate else { return }
+            let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
+            
+            self.mapView.addAnnotation(annotation)
+        }
+        
     }
     
     func checkIfUserIsLoggedIn() {
@@ -61,6 +75,11 @@ class HomeController: UIViewController {
     func signOut() {
         do {
             try Auth.auth().signOut()
+            DispatchQueue.main.async {
+                let nav = UINavigationController(rootViewController: LoginController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            }
         } catch {
             print("DEBUG: Error signing out.")
         }
@@ -128,26 +147,26 @@ class HomeController: UIViewController {
 
 // MARK: - Location Services
 
-extension HomeController: CLLocationManagerDelegate {
+extension HomeController {
     
     func enableLocationServices() {
-        locationManager.delegate = self
+        
         switch CLLocationManager.authorizationStatus() {
             
         case .notDetermined:
             print("DEBUG: Not determined.")
-            locationManager.requestWhenInUseAuthorization()
+            locationManager?.requestWhenInUseAuthorization()
         case .restricted:
             break
         case .denied:
             break
         case .authorizedAlways:
             print("DEBUG: Auth always.")
-            locationManager.startUpdatingLocation()
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager?.startUpdatingLocation()
+            locationManager?.desiredAccuracy = kCLLocationAccuracyBest
         case .authorizedWhenInUse:
             print("DEBUG: Auth when in use.")
-            locationManager.requestAlwaysAuthorization()
+            locationManager?.requestAlwaysAuthorization()
         @unknown default:
             print("DEBUG: default")
             break
@@ -155,12 +174,7 @@ extension HomeController: CLLocationManagerDelegate {
         
     }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
-        if status == .authorizedWhenInUse {
-            locationManager.requestAlwaysAuthorization()
-        }
-    }
+
     
 }
 

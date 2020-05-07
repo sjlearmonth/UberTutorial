@@ -9,10 +9,14 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import GeoFire
 
 class SignUpController: UIViewController {
     
     // MARK: - Properties
+    
+    private var location = LocationHandler.shared.locationManager.location
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "UBER"
@@ -99,6 +103,7 @@ class SignUpController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        
     }
     
     //MARK: - Selectors
@@ -118,29 +123,39 @@ class SignUpController: UIViewController {
             
             guard let uid = result?.user.uid else { return }
             
+            
             let values: [String : Any] = ["email" : email,
                                           "fullname" : fullname,
                                           "accountType" : accountTypeIndex]
             
-            Database.database().reference().child("users").child(uid).updateChildValues(values) { (error, ref) in
+            if accountTypeIndex == 1 {
+                let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
+                guard let location = self.location else { return }
                 
-                guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
-
-                guard let controller = window.rootViewController as? HomeController else { return }
-
-                controller.configureUI()
-
-                self.dismiss(animated: true, completion: nil)
+                geofire.setLocation(location, forKey: uid, withCompletionBlock: { (error) in
+                    self.uploadUserDataAndShowHomeController(uid: uid, values: values)
+                    })
+                
             }
             
+            self.uploadUserDataAndShowHomeController(uid: uid, values: values)
         }
     }
-    
+        
     @objc func handleShowLogin() {
         navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Helper Functions
+    
+    func uploadUserDataAndShowHomeController(uid: String, values: [String : Any]) {
+        REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: { (error, ref) in
+            guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+            guard let controller = window.rootViewController as? HomeController else { return }
+            controller.configureUI()
+            self.dismiss(animated: true, completion: nil)
+        })
+    }
     
     func configureUI() {
         
