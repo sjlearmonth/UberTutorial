@@ -12,11 +12,12 @@ import MapKit
 
 private let reuseIdentifier = "LocationCell"
 
-class HomeController: UIViewController {
+class HomeController: UIViewController, MKMapViewDelegate {
     
     // MARK: - Properties
     
     private let mapView = MKMapView()
+    
     private let locationManager = LocationHandler.shared.locationManager
     
     private let inputActivationView = LocationInputActivationView()
@@ -33,11 +34,20 @@ class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        mapView.delegate = self
         checkIfUserIsLoggedIn()
         enableLocationServices()
         fetchUserData()
         fetchDrivers()
 //        signOut()
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let annotationView = MKAnnotationView()
+        annotationView.image = #imageLiteral(resourceName: "map_pin")
+        
+        return annotationView
     }
     
     // MARK: - API
@@ -54,7 +64,6 @@ class HomeController: UIViewController {
         Service.shared.fetchDrivers(location: location) { (driver) in
             guard let coordinate = driver.location?.coordinate else { return }
             let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
-            
             self.mapView.addAnnotation(annotation)
         }
         
