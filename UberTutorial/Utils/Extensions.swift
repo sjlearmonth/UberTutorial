@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 extension UIView {
     
@@ -131,4 +132,32 @@ extension UIColor {
     static let backgroundColor = UIColor.rgb(red: 25, green: 25, blue: 25)
     static let mainBlueTint = UIColor.rgb(red: 17, green: 154, blue: 237)
     
+}
+
+extension MKPlacemark {
+    var address: String? {
+        get {
+            guard let subThoroughfare = subThoroughfare else { return nil }
+            guard let thoroughfare = thoroughfare else { return nil }
+            guard let locality = locality else { return nil }
+            guard let adminArea = administrativeArea else { return nil }
+            
+            return "\(subThoroughfare) \(thoroughfare), \(locality), \(adminArea)"
+        }
+    }
+}
+
+extension MKMapView {
+    func zoomToFit(annotations: [MKAnnotation]) {
+        var zoomRect = MKMapRect.null
+        
+        annotations.forEach { (annotation) in
+            let annontationPoint = MKMapPoint(annotation.coordinate)
+            let pointRect = MKMapRect(x: annontationPoint.x, y: annontationPoint.y, width: 0.01, height: 0.01)
+            zoomRect = zoomRect.union(pointRect)
+        }
+        
+        let insets = UIEdgeInsets(top: 100, left: 100, bottom: 200, right: 100)
+        setVisibleMapRect(zoomRect, edgePadding: insets, animated: true)
+    }
 }

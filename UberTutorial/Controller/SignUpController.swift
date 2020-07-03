@@ -152,7 +152,7 @@ class SignUpController: UIViewController {
         REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: { (error, ref) in
             guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
             guard let controller = window.rootViewController as? HomeController else { return }
-            controller.configureUI()
+            controller.configure()
             self.dismiss(animated: true, completion: nil)
         })
     }
