@@ -15,6 +15,8 @@
 		C44FB6AB244F42C9007AC38D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C44FB6AA244F42C9007AC38D /* Assets.xcassets */; };
 		C44FB6AE244F42C9007AC38D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C44FB6AC244F42C9007AC38D /* LaunchScreen.storyboard */; };
 		C44FB6BC244F4544007AC38D /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FB6BB244F4544007AC38D /* LoginController.swift */; };
+		C463B9D924B4C56800A4FB96 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C463B9D824B4C56800A4FB96 /* Trip.swift */; };
+		C463B9DB24B4E3FF00A4FB96 /* PickupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C463B9DA24B4E3FF00A4FB96 /* PickupController.swift */; };
 		C47B91A824AE1EA200202A2F /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47B91A724AE1EA200202A2F /* RideActionView.swift */; };
 		C488F83E2459D6CA00DCD719 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C488F83D2459D6CA00DCD719 /* HomeController.swift */; };
 		C4A81ED42457297500CA68DC /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A81ED32457297500CA68DC /* SignUpController.swift */; };
@@ -40,6 +42,8 @@
 		C44FB6AD244F42C9007AC38D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C44FB6AF244F42C9007AC38D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C44FB6BB244F4544007AC38D /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		C463B9D824B4C56800A4FB96 /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		C463B9DA24B4E3FF00A4FB96 /* PickupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupController.swift; sourceTree = "<group>"; };
 		C47B91A724AE1EA200202A2F /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		C488F83D2459D6CA00DCD719 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		C4A81ED32457297500CA68DC /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 				C44FB6BB244F4544007AC38D /* LoginController.swift */,
 				C4A81ED32457297500CA68DC /* SignUpController.swift */,
 				C488F83D2459D6CA00DCD719 /* HomeController.swift */,
+				C463B9DA24B4E3FF00A4FB96 /* PickupController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 			children = (
 				C4F285FA24644D2200E76CC6 /* User.swift */,
 				C4F285FE246472AD00E76CC6 /* DriverAnnotation.swift */,
+				C463B9D824B4C56800A4FB96 /* Trip.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -290,6 +296,8 @@
 				C4A81ED6245740F100CA68DC /* AuthButton.swift in Sources */,
 				C488F83E2459D6CA00DCD719 /* HomeController.swift in Sources */,
 				C4F285F32461BF2A00E76CC6 /* LocationInputView.swift in Sources */,
+				C463B9D924B4C56800A4FB96 /* Trip.swift in Sources */,
+				C463B9DB24B4E3FF00A4FB96 /* PickupController.swift in Sources */,
 				C4F285FF246472AD00E76CC6 /* DriverAnnotation.swift in Sources */,
 				C4F285F52461C33900E76CC6 /* LocationInputActivationView.swift in Sources */,
 				C44FB6A2244F42C6007AC38D /* AppDelegate.swift in Sources */,
