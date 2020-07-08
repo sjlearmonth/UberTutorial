@@ -55,6 +55,7 @@ class HomeController: UIViewController{
         didSet {
             guard let trip = trip else { return }
             let controller = PickupController(trip: trip)
+            controller.delegate = self
             controller.modalPresentationStyle = .custom
             self.present(controller, animated: true, completion: nil)
             
@@ -78,8 +79,11 @@ class HomeController: UIViewController{
         
         checkIfUserIsLoggedIn()
         enableLocationServices()
-
-  
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard let trip = trip else { return }
+        print("DEBUG: Trip state is \(String(describing: trip.state))")
     }
         
     // MARK: - Selectors
@@ -473,19 +477,39 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: - RideActionViewDelegate
+
 extension HomeController: RideActionViewDelegate {
     
     func uploadTrip(_ view: RideActionView) {
         guard let pickupCoordinates = locationManager?.location?.coordinate else { return }
         guard let destinationCoordinates = view.destination?.coordinate else { return }
+        
+        shouldPresentLoadingView(true, message: "Finding you a ride now.")
+        
         Service.shared.uploadTrip(pickupCoordinates, destinationCoordinates) { (err, ref) in
             if let error = err {
                 print("DEBUG: Failed to upload trip with error: \(error.localizedDescription)")
                 return
             }
             
-            print("DEBUG: Did upload trip successfully.")
+            UIView.animate(withDuration: 0.3, animations: {
+                self.rideActionView.frame.origin.y = self.view.frame.height
+            })
         }
         
     }
+}
+
+// MARK: - PickupControllerDelegate
+
+extension HomeController: PickupControllerDelegate {
+    func didAcceptTrip(_ trip: Trip) {
+        self.trip?.state = .accepted
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
+    
 }

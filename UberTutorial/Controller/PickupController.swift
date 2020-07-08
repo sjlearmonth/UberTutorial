@@ -9,9 +9,15 @@
 import UIKit
 import MapKit
 
+protocol PickupControllerDelegate: class {
+    func didAcceptTrip(_ trip: Trip)
+}
+
 class PickupController: UIViewController {
     
     // MARK: - Properties
+    
+    weak var delegate: PickupControllerDelegate?
     
     private let mapView = MKMapView()
     let trip: Trip
@@ -57,6 +63,7 @@ class PickupController: UIViewController {
         super.viewDidLoad()
         
         configureUI()
+        configureMapView()
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -70,12 +77,24 @@ class PickupController: UIViewController {
     }
     
     @objc func handleAcceptTrip() {
-        print("DEBUG: Accept trip here.")
+        Service.shared.acceptTrip(trip: trip) { (error, ref) in
+            self.delegate?.didAcceptTrip(self.trip)
+        }
     }
     
     // MARK: API
     
     // MARK: - Helper Functions
+    
+    func configureMapView() {
+        let region = MKCoordinateRegion(center: trip.pickupCoordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.setRegion(region, animated: false)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = trip.pickupCoordinates
+        mapView.addAnnotation(annotation)
+        self.mapView.selectAnnotation(annotation, animated: true)
+    }
     
     func configureUI() {
         view.backgroundColor = .backgroundColor
