@@ -45,6 +45,7 @@ class HomeController: UIViewController{
             if user?.accountType == .passenger {
                 fetchDrivers()
                 configureLocationInputActivationView()
+                observeCurrentTrip()
             } else {
                 observeTrips()
             }
@@ -53,15 +54,19 @@ class HomeController: UIViewController{
     
     private var trip: Trip? {
         didSet {
-            guard let trip = trip else { return }
-            let controller = PickupController(trip: trip)
-            controller.delegate = self
-            controller.modalPresentationStyle = .custom
-            self.present(controller, animated: true, completion: nil)
+            guard let user = user else { return }
             
+            if user.accountType == .driver {
+
+                guard let trip = trip else { return }
+                let controller = PickupController(trip: trip)
+                controller.delegate = self
+                controller.modalPresentationStyle = .custom
+                self.present(controller, animated: true, completion: nil)
+            } else {
+                print("DEBUG: Show ride action view for accepted trip.")
+            }
         }
-        
-        
     }
     
     private let actionButton: UIButton = {
@@ -79,6 +84,8 @@ class HomeController: UIViewController{
         
         checkIfUserIsLoggedIn()
         enableLocationServices()
+//        signOut()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,6 +113,25 @@ class HomeController: UIViewController{
     
     
     // MARK: - API
+    
+    func observeCurrentTrip() {
+        
+        Service.shared.observeCurrentTrip { trip in
+            self.trip = trip
+            
+            if trip.state == .accepted {
+                self.shouldPresentLoadingView(false)
+                guard let driverUid = trip.driverUid else { return }
+                
+                Service.shared.fetchUserData(uid: driverUid) { driver in
+                    self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: driver)
+                }
+                
+
+            }
+        }
+        
+    }
     
     func fetchUserData() {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
@@ -271,17 +297,27 @@ class HomeController: UIViewController{
         }, completion: completion)
     }
     
-    func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil) {
+    func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil, config: RideActionViewConfiguration? = nil, user: User? = nil) {
         
         let height = shouldShow ? self.rideActionViewHeight : 0
         
-        if shouldShow {
-            guard let destination = destination else { return }
-            rideActionView.destination = destination
-        }
-        
         UIView.animate(withDuration: 0.3) {
             self.rideActionView.frame.origin.y = self.view.frame.height - height
+        }
+
+        if shouldShow {
+            guard let config = config else { return }
+            
+            if let destination = destination {
+                rideActionView.destination = destination
+            }
+            
+            if let user = user {
+                rideActionView.user = user
+            }
+            
+            rideActionView.configureUI(withConfig: config)
+            
         }
     }
 }
@@ -319,6 +355,7 @@ private extension HomeController {
             guard let response = response else { return }
             self.route = response.routes[0]
             guard let polyline = self.route?.polyline else { return }
+            
             self.mapView.addOverlay(polyline)
         }
     }
@@ -335,8 +372,6 @@ private extension HomeController {
         if mapView.overlays.count > 0 {
             mapView.removeOverlay(mapView.overlays[0])
         }
-        
-        
     }
 }
 
@@ -359,10 +394,10 @@ extension HomeController: MKMapViewDelegate {
             let polyline = route.polyline
             let lineRenderer = MKPolylineRenderer(overlay: polyline)
             lineRenderer.strokeColor = .mainBlueTint
-            lineRenderer.lineWidth = 3
+            lineRenderer.lineWidth = 4
             return lineRenderer
         }
-        return MKOverlayRenderer()
+        return MKOverlayRenderer()                  
     }
 }
 // MARK: - Location Services
@@ -393,9 +428,6 @@ extension HomeController {
         }
         
     }
-    
-
-    
 }
 
 // MARK: - LocationInputActivationViewDelegate
@@ -472,7 +504,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
                 DriverAnnotation.self) })
             self.mapView.zoomToFit(annotations: annotations)
             
-            self.animateRideActionView(shouldShow: true, destination: selectedPlacemark)
+            self.animateRideActionView(shouldShow: true, destination: selectedPlacemark, config: .requestRide)
         }
     }
 }
@@ -505,11 +537,23 @@ extension HomeController: RideActionViewDelegate {
 
 extension HomeController: PickupControllerDelegate {
     func didAcceptTrip(_ trip: Trip) {
-        self.trip?.state = .accepted
-        self.dismiss(animated: true, completion: nil)
+
+        let anno = MKPointAnnotation()
+        anno.coordinate = trip.pickupCoordinates
+        mapView.addAnnotation(anno)
+        mapView.selectAnnotation(anno, animated: true)
+        
+        let placemark = MKPlacemark(coordinate: trip.pickupCoordinates)
+        let mapItem = MKMapItem(placemark: placemark)
+        generatePolyline(toDestination: mapItem)
+        
+        mapView.zoomToFit(annotations: mapView.annotations)
+
+        self.dismiss(animated: true) {
+            Service.shared.fetchUserData(uid: trip.passengerUid) { passenger in
+                self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: passenger)
+            }
+            
+        }
     }
-    
-    
-    
-    
 }

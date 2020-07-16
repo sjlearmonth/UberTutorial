@@ -79,6 +79,8 @@ class PickupController: UIViewController {
     @objc func handleAcceptTrip() {
         Service.shared.acceptTrip(trip: trip) { (error, ref) in
             self.delegate?.didAcceptTrip(self.trip)
+//            print("DEBUG: PickupController - pickup: \(self.trip.pickupCoordinates)")
+//            print("DEBUG: PickupController - destin: \(self.trip.destinationCoordinates)")
         }
     }
     
