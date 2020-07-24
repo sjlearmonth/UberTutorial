@@ -92,11 +92,8 @@ class HomeController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        checkIfUserIsLoggedIn()
         enableLocationServices()
-//        signOut()
-        
+        configureUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -223,42 +220,8 @@ class HomeController: UIViewController{
             self.presentAlertController(withTitle: "Oops!", withMessage: "The passenger has decided to cancel this ride. Press OK to continue.")
         }
     }
-    
-    // MARK: Shared API
-    
 
-    
-    func checkIfUserIsLoggedIn() {
-        if Auth.auth().currentUser?.uid == nil {
-            DispatchQueue.main.async {
-                let nav = UINavigationController(rootViewController: LoginController())
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true, completion: nil)
-            }
-        } else {
-            configure()
-        }
-    }
-    
-    func signOut() {
-        do {
-            try Auth.auth().signOut()
-            DispatchQueue.main.async {
-                let nav = UINavigationController(rootViewController: LoginController())
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true, completion: nil)
-            }
-        } catch {
-            print("DEBUG: Error signing out.")
-        }
-    }
-    
     // MARK: - Helper Functions
-    
-    func configure() {
-        configureUI()
-        
-    }
     
     fileprivate func configureActionButton(config: ActionButtonConfiguration) {
         switch config {
