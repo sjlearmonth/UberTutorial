@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B4708B0856EAC2006ED169F9 /* Pods_UberTutorial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55646F27DC743732DD55A8C /* Pods_UberTutorial.framework */; };
 		C407693D244F535800793290 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C407693C244F535800793290 /* Extensions.swift */; };
+		C42C326D24CF212500702B8D /* UserInfoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C326C24CF212500702B8D /* UserInfoHeader.swift */; };
 		C44FB6A2244F42C6007AC38D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FB6A1244F42C6007AC38D /* AppDelegate.swift */; };
 		C44FB6A4244F42C6007AC38D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FB6A3244F42C6007AC38D /* SceneDelegate.swift */; };
 		C44FB6A9244F42C6007AC38D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C44FB6A7244F42C6007AC38D /* Main.storyboard */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		39978E0B2F6B3ED5AA02C376 /* Pods-UberTutorial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberTutorial.debug.xcconfig"; path = "Target Support Files/Pods-UberTutorial/Pods-UberTutorial.debug.xcconfig"; sourceTree = "<group>"; };
 		C407693C244F535800793290 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		C42C326C24CF212500702B8D /* UserInfoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoHeader.swift; sourceTree = "<group>"; };
 		C44FB69E244F42C6007AC38D /* UberTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FB6A1244F42C6007AC38D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C44FB6A3244F42C6007AC38D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				C4F285F62463066300E76CC6 /* LocationCell.swift */,
 				C47B91A724AE1EA200202A2F /* RideActionView.swift */,
 				C47AF8CD24C9E36400FBEEBB /* MenuHeader.swift */,
+				C42C326C24CF212500702B8D /* UserInfoHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				C4A81ED42457297500CA68DC /* SignUpController.swift in Sources */,
 				C4A81ED6245740F100CA68DC /* AuthButton.swift in Sources */,
 				C488F83E2459D6CA00DCD719 /* HomeController.swift in Sources */,
+				C42C326D24CF212500702B8D /* UserInfoHeader.swift in Sources */,
 				C47AF8D024CB3AD200FBEEBB /* SettingsController.swift in Sources */,
 				C4F285F32461BF2A00E76CC6 /* LocationInputView.swift in Sources */,
 				C463B9D924B4C56800A4FB96 /* Trip.swift in Sources */,
