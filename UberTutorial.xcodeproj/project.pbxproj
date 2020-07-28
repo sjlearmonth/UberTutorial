@@ -10,6 +10,7 @@
 		B4708B0856EAC2006ED169F9 /* Pods_UberTutorial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55646F27DC743732DD55A8C /* Pods_UberTutorial.framework */; };
 		C407693D244F535800793290 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C407693C244F535800793290 /* Extensions.swift */; };
 		C42C326D24CF212500702B8D /* UserInfoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C326C24CF212500702B8D /* UserInfoHeader.swift */; };
+		C42C327024D082FE00702B8D /* AddLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C326F24D082FE00702B8D /* AddLocationController.swift */; };
 		C44FB6A2244F42C6007AC38D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FB6A1244F42C6007AC38D /* AppDelegate.swift */; };
 		C44FB6A4244F42C6007AC38D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44FB6A3244F42C6007AC38D /* SceneDelegate.swift */; };
 		C44FB6A9244F42C6007AC38D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C44FB6A7244F42C6007AC38D /* Main.storyboard */; };
@@ -40,6 +41,7 @@
 		39978E0B2F6B3ED5AA02C376 /* Pods-UberTutorial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberTutorial.debug.xcconfig"; path = "Target Support Files/Pods-UberTutorial/Pods-UberTutorial.debug.xcconfig"; sourceTree = "<group>"; };
 		C407693C244F535800793290 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C42C326C24CF212500702B8D /* UserInfoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoHeader.swift; sourceTree = "<group>"; };
+		C42C326F24D082FE00702B8D /* AddLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationController.swift; sourceTree = "<group>"; };
 		C44FB69E244F42C6007AC38D /* UberTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C44FB6A1244F42C6007AC38D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C44FB6A3244F42C6007AC38D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -99,6 +101,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C42C326E24D082C600702B8D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C47AF8CF24CB3AD200FBEEBB /* SettingsController.swift */,
+				C42C326F24D082FE00702B8D /* AddLocationController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		C44FB695244F42C6007AC38D = {
 			isa = PBXGroup;
 			children = (
@@ -147,11 +158,11 @@
 		C44FB6B7244F4321007AC38D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				C42C326E24D082C600702B8D /* Settings */,
 				C47AF8C824C8A73800FBEEBB /* SideMenu */,
 				C47AF8C724C8A71700FBEEBB /* Authentication */,
 				C488F83D2459D6CA00DCD719 /* HomeController.swift */,
 				C463B9DA24B4E3FF00A4FB96 /* PickupController.swift */,
-				C47AF8CF24CB3AD200FBEEBB /* SettingsController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -334,6 +345,7 @@
 				C4F285FF246472AD00E76CC6 /* DriverAnnotation.swift in Sources */,
 				C4F285F52461C33900E76CC6 /* LocationInputActivationView.swift in Sources */,
 				C44FB6A2244F42C6007AC38D /* AppDelegate.swift in Sources */,
+				C42C327024D082FE00702B8D /* AddLocationController.swift in Sources */,
 				C4F285F72463066300E76CC6 /* LocationCell.swift in Sources */,
 				C47AF8CA24C8A79700FBEEBB /* MenuController.swift in Sources */,
 				C4F285FD2464570800E76CC6 /* LocationHandler.swift in Sources */,
