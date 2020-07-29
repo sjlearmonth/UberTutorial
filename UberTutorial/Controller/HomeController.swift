@@ -44,6 +44,7 @@ class HomeController: UIViewController{
     private let locationInputView = LocationInputView()
     private let tableView = UITableView()
     private var searchResults = [MKPlacemark]()
+    private var savedLocations = [MKPlacemark]()
     private final let locationInputViewHeight: CGFloat = 200.0
     private final let rideActionViewHeight: CGFloat = 300.0
     private var actionButtonConfig = ActionButtonConfiguration()
@@ -57,6 +58,7 @@ class HomeController: UIViewController{
                 fetchDrivers()
                 configureLocationInputActivationView()
                 observeCurrentTrip()
+                configureSavedUserLocations()
             } else {
                 observeTrips()
             }
@@ -234,6 +236,29 @@ class HomeController: UIViewController{
             
         }
         
+    }
+    
+    func configureSavedUserLocations() {
+        guard let user = user else { return }
+        savedLocations.removeAll()
+
+        if let homeLocation = user.homeLocation {
+            geocodeAddressString(address: homeLocation)
+        }
+        
+        if let workLocation = user.workLocation {
+            geocodeAddressString(address: workLocation)
+        }
+    }
+    
+    func geocodeAddressString(address: String) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { (placemarks, error) in
+            guard let clPlacemark = placemarks?.first else { return }
+            let placemark = MKPlacemark(placemark: clPlacemark)
+            self.savedLocations.append(placemark)
+            self.tableView.reloadData()
+        }
     }
     
     func configureUI() {
@@ -552,7 +577,7 @@ extension HomeController: LocationInputViewDelegate {
 extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        "Test"
+        return section == 0 ? "Saved Locations" : "Results"
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -560,11 +585,16 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : searchResults.count
+        return section == 0 ? savedLocations.count : searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! LocationCell
+        
+        if indexPath.section == 0 {
+            cell.placemark = savedLocations[indexPath.row]
+        }
+        
         if indexPath.section == 1 {
             cell.placemark = searchResults[indexPath.row]
         }
@@ -573,7 +603,8 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedPlacemark = searchResults[indexPath.row]
+        
+        let selectedPlacemark = indexPath.section == 0 ? savedLocations[indexPath.row] : searchResults[indexPath.row]
         
         configureActionButton(config: .dismissActionView)
         

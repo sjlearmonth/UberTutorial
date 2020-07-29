@@ -90,7 +90,8 @@ extension AddLocationController {
         let result = searchResults[indexPath.row]
         let title = result.title
         let subTitle = result.subtitle
-        let locationString = title + " " + subTitle
+        var locationString = title + " " + subTitle
+        locationString = locationString.replacingOccurrences(of: ", England", with: "")
         delegate?.updateLocation(locationString: locationString, type: type)
     }
 }

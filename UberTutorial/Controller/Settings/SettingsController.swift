@@ -29,12 +29,18 @@ enum LocationType: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
+protocol SettingsControllerDelegate: class {
+    func updateUser(_ controller: SettingsController)
+}
+
 class SettingsController: UITableViewController {
     
     // MARK: Properties
     
-    private let user: User
+    var user: User
     private let locationManager = LocationHandler.shared.locationManager
+    weak var delegate: SettingsControllerDelegate?
+    var userInfoUpdated = false
     
     private lazy var infoHeader: UserInfoHeader = {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
@@ -62,10 +68,24 @@ class SettingsController: UITableViewController {
     // MARK: Selectors
     
     @objc func handleDismissal() {
+        
+        if userInfoUpdated {
+            delegate?.updateUser(self)
+        }
+        
         self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Helper Functions
+    
+    func locationText(forType type: LocationType) -> String {
+        switch type {
+        case .home:
+            return user.homeLocation ?? type.subTitle
+        case .work:
+            return user.workLocation ?? type.subTitle
+        }
+    }
     
     func configureTableView() {
         tableView.rowHeight = 60
@@ -77,12 +97,7 @@ class SettingsController: UITableViewController {
     
     func configureNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-//        navigationController?.navigationBar.isTranslucent = false
-//        navigationController?.navigationBar.barStyle = .black
         navigationItem.title = "Settings"
-//        navigationController?.navigationBar.barTintColor = .black
-//        navigationController?.navigationBar.alpha = 1
-//        navigationController?.navigationBar.isOpaque
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "black_cross").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleDismissal))
 //        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Black Cross").withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -100, bottom: 0, right: 0)), style: .plain, target: self, action: #selector(handleDismissal))
@@ -116,7 +131,8 @@ extension SettingsController {
         
         guard let type = LocationType(rawValue: indexPath.row) else { return cell }
         
-        cell.type = type
+        cell.titleLabel.text = type.description
+        cell.addressLabel.text = locationText(forType: type)
         
         return cell
     }
@@ -138,6 +154,16 @@ extension SettingsController: AddLocationControllerDelegate {
     func updateLocation(locationString: String, type: LocationType) {
         PassengerService.shared.saveLocation(locationString: locationString, type: type) { (err, ref) in
             self.dismiss(animated: true, completion: nil)
+            self.userInfoUpdated = true
+        
+            switch type {
+            case .home:
+                self.user.homeLocation = locationString
+            case .work:
+                self.user.workLocation = locationString
+            }
+        
+            self.tableView.reloadData()
         }
     }
 }
