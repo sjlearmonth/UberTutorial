@@ -9,6 +9,18 @@
 import UIKit
 import MapKit
 
+extension UIColor {
+    static func setRgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
+        return UIColor.init(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1.0)
+    }
+    
+    static let customBackgroundColor = UIColor.setRgb(red: 25, green: 25, blue: 25)
+    static let customMainBlueTint = UIColor.setRgb(red: 17, green: 154, blue: 25)
+    static let customOutlineStrokeColor = UIColor.setRgb(red: 234, green: 46, blue: 111)
+    static let customTrackStrokeColor = UIColor.setRgb(red: 56, green: 25, blue: 46)
+    static let customPulsatingFillColor = UIColor.setRgb(red: 86, green: 30, blue: 63)
+}
+
 extension UIView {
     
     func inputContainerView(image: UIImage, textField: UITextField? = nil, segmentedControl: UISegmentedControl? = nil) -> UIView {
@@ -223,3 +235,4 @@ extension UIViewController {
         }
     }
 }
+

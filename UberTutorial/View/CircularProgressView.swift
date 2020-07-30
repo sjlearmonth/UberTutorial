@@ -31,14 +31,14 @@ class CircularProgressView: UIView {
     
     private func configureCircleLayers() {
         
-        pulsatingLayer = circleShapeLayer(strokeColor: .clear, fillColor: .blue)
+        pulsatingLayer = circleShapeLayer(strokeColor: .clear, fillColor: .customPulsatingFillColor)
         layer.addSublayer(pulsatingLayer)
         
-        trackLayer = circleShapeLayer(strokeColor: .clear, fillColor: .clear)
+        trackLayer = circleShapeLayer(strokeColor: .customTrackStrokeColor, fillColor: .clear)
         layer.addSublayer(trackLayer)
         trackLayer.strokeEnd = 1
         
-        progressLayer = circleShapeLayer(strokeColor: .systemPink, fillColor: .clear)
+        progressLayer = circleShapeLayer(strokeColor: .customOutlineStrokeColor, fillColor: .clear)
         layer.addSublayer(progressLayer)
         progressLayer.strokeEnd = 1
     }
@@ -65,8 +65,8 @@ class CircularProgressView: UIView {
         let animation = CABasicAnimation(keyPath: "transform.scale")
         
         animation.toValue = 1.25
-        animation.duration = 1
-        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        animation.duration = 0.8
+        animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         animation.autoreverses = true
         animation.repeatCount = Float.infinity
         
@@ -78,7 +78,7 @@ class CircularProgressView: UIView {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completion)
         
-        let animation = CABasicAnimation(keyPath: "strokedEnd")
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
         animation.duration = duration
         animation.fromValue = 1
         animation.toValue = value

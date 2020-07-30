@@ -100,7 +100,6 @@ class SettingsController: UITableViewController {
         navigationItem.title = "Settings"
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "black_cross").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleDismissal))
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Black Cross").withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -100, bottom: 0, right: 0)), style: .plain, target: self, action: #selector(handleDismissal))
     }
 }
 
